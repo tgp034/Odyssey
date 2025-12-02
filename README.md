@@ -1,81 +1,73 @@
-# WebApp boilerplate with React JS and Flask API
+# Odyssey
 
-Build web applications using React.js for the front end and python/flask for your backend API.
+Full-stack platform for discovering destinations, managing points of interest, and organizing travel experiences. The front end runs on **React + Vite**, while the backend uses **Flask + SQLAlchemy** with JWT authentication and a relational database for users, locations, and status flags (favorites/visited).
 
-- Documentation can be found here: https://4geeks.com/docs/start/react-flask-template
-- Here is a video on [how to use this template](https://www.loom.com/share/f37c6838b3f1496c95111e515e83dd9b)
-- Integrated with Pipenv for package managing.
-- Fast deployment to Render [in just a few steps here](https://4geeks.com/docs/start/deploy-to-render-com).
-- Use of .env file.
-- SQLAlchemy integration for database abstraction.
+## Key features
+- 🔐 **JWT authentication**: sign up, log in, and update profiles with encrypted passwords.
+- 🗺️ **Destination catalog**: countries, cities, and points of interest with coordinates, descriptions, and images.
+- ⭐ **Favorites and visited**: users can mark places as favorites or log them as visited.
+- 🏷️ **Content tagging**: associate tags to points of interest for themed filtering and exploration.
+- 🌐 **RESTful API**: clear endpoints for CRUD of users, locations, and relationships, protected by JWT when required.
+- 🎨 **Responsive UI**: React Router navigation, landing hero, and a grid of popular destinations powered by the API.
 
-### 1) Installation:
+## Architecture
+- **Front end**: React 18 with Vite, React Router 6, FontAwesome, and custom styles in `src/front`.
+- **Back end**: Flask with Blueprints, SQLAlchemy, and Flask-JWT-Extended in `src/api`.
+- **Database**: PostgreSQL (recommended) with models for users, countries, cities, points of interest, images, tags, and many-to-many relationships.
+- **Environment management**: variables defined in `.env` (see `.env.example`) for the database URL, Flask app key, and backend URL consumed by the front end.
 
-> If you use Github Codespaces (recommended) or Gitpod this template will already come with Python, Node and the Posgres Database installed. If you are working locally make sure to install Python 3.10, Node 
+## Prerequisites
+- Python 3.10+
+- Node.js 20+
+- Pipenv
+- PostgreSQL (or another engine set in `DATABASE_URL`)
 
-It is recomended to install the backend first, make sure you have Python 3.10, Pipenv and a database engine (Posgress recomended)
+## Quick setup
+1. **Environment variables**
+   ```bash
+   cp .env.example .env
+   # Edit .env with your DATABASE_URL, FLASK_APP_KEY, and VITE_BACKEND_URL
+   ```
 
-1. Install the python packages: `$ pipenv install`
-2. Create a .env file based on the .env.example: `$ cp .env.example .env`
-3. Install your database engine and create your database, depending on your database you have to create a DATABASE_URL variable with one of the possible values, make sure you replace the valudes with your database information:
+2. **Install backend dependencies**
+   ```bash
+   pipenv install
+   ```
 
-| Engine    | DATABASE_URL                                        |
-| --------- | --------------------------------------------------- |
-| SQLite    | sqlite:////test.db                                  |
-| MySQL     | mysql://username:password@localhost:port/example    |
-| Postgress | postgres://username:password@localhost:5432/example |
+3. **Prepare the database**
+   ```bash
+   pipenv run migrate   # generate tables (if applicable)
+   pipenv run upgrade   # apply migrations
+   ```
 
-4. Migrate the migrations: `$ pipenv run migrate` (skip if you have not made changes to the models on the `./src/api/models.py`)
-5. Run the migrations: `$ pipenv run upgrade`
-6. Run the application: `$ pipenv run start`
+4. **Start the API**
+   ```bash
+   pipenv run start
+   ```
 
-> Note: Codespaces users can connect to psql by typing: `psql -h localhost -U gitpod example`
+5. **Install and start the front end**
+   ```bash
+   npm install
+   npm run dev  # or npm run start
+   ```
 
-### Undo a migration
+## Useful scripts
+- **Rollback last migration**: `pipenv run downgrade`
+- **Insert test users**: `flask insert-test-users 5`
+- **Front-end lint**: `npm run lint`
+- **Production build (front end)**: `npm run build`
 
-You are also able to undo a migration by running
+## Relevant structure
+- `src/api/models.py`: SQLAlchemy models (User, Country, City, Poi, Tag, favorites/visited, and images).
+- `src/api/routes.py`: authentication, catalog, and relationship endpoints (JWT protection where applicable).
+- `src/front`: React app with routes (`routes.jsx`), pages, and components (jumbotron, popular-destination cards, etc.).
 
-```sh
-$ pipenv run downgrade
-```
+## Deployment
+The project ships with base configs for Render (`render.yaml`, `Dockerfile.render`, `render_build.sh`) and a `Procfile` for compatible environments. Adjust environment variables and the public backend URL (`VITE_BACKEND_URL`) before publishing.
 
-### Backend Populate Table Users
+## Contributing
+1. Create a branch from `main`.
+2. Apply changes following existing code conventions.
+3. Run checks (lint, migrations) before opening a PR.
 
-To insert test users in the database execute the following command:
-
-```sh
-$ flask insert-test-users 5
-```
-
-And you will see the following message:
-
-```
-  Creating test users
-  test_user1@test.com created.
-  test_user2@test.com created.
-  test_user3@test.com created.
-  test_user4@test.com created.
-  test_user5@test.com created.
-  Users created successfully!
-```
-
-### **Important note for the database and the data inside it**
-
-Every Github codespace environment will have **its own database**, so if you're working with more people eveyone will have a different database and different records inside it. This data **will be lost**, so don't spend too much time manually creating records for testing, instead, you can automate adding records to your database by editing ```commands.py``` file inside ```/src/api``` folder. Edit line 32 function ```insert_test_data``` to insert the data according to your model (use the function ```insert_test_users``` above as an example). Then, all you need to do is run ```pipenv run insert-test-data```.
-
-### Front-End Manual Installation:
-
--   Make sure you are using node version 20 and that you have already successfully installed and runned the backend.
-
-1. Install the packages: `$ npm install`
-2. Start coding! start the webpack dev server `$ npm run start`
-
-## Publish your website!
-
-This boilerplate it's 100% read to deploy with Render.com and Heroku in a matter of minutes. Please read the [official documentation about it](https://4geeks.com/docs/start/deploy-to-render-com).
-
-### Contributors
-
-This template was built as part of the 4Geeks Academy [Coding Bootcamp](https://4geeksacademy.com/us/coding-bootcamp) by [Alejandro Sanchez](https://twitter.com/alesanchezr) and many other contributors. Find out more about our [Full Stack Developer Course](https://4geeksacademy.com/us/coding-bootcamps/part-time-full-stack-developer), and [Data Science Bootcamp](https://4geeksacademy.com/us/coding-bootcamps/datascience-machine-learning).
-
-You can find other templates and resources like this at the [school github page](https://github.com/4geeksacademy/).
+Enjoy building new travel experiences with Odyssey!
