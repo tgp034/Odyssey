@@ -1,5 +1,8 @@
 # Odyssey
 
+<img width="1140" height="1662" alt="image" src="https://github.com/user-attachments/assets/07143153-3fbd-467f-a0ad-197eab6ce0ab" />
+
+
 Full-stack platform for discovering destinations, managing points of interest, and organizing travel experiences. The front end runs on **React + Vite**, while the backend uses **Flask + SQLAlchemy** with JWT authentication and a relational database for users, locations, and status flags (favorites/visited).
 
 ## Key features
